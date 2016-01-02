@@ -6,6 +6,11 @@ import org.eclipse.jetty.server.Server;
 public class Main {
     
     public static void main(String[] args) throws Exception {
+        //debug
+        ThreadPool tp = new ThreadPool(30);
+        tp.start();
+        
+        
         // запускаем jetty
         Server jettyServer = new Server(8090);
         Frontend fe = new Frontend();
