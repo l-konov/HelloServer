@@ -8,6 +8,8 @@ package ru.leonid;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -15,28 +17,73 @@ import java.util.Set;
  */
 public class ThreadPool {
     
-    Set<Thread> pool;
+    private Set<Thread> pool;
+    private static long currentMinId = 0;
     
+    // конструктор
     public ThreadPool(int N) {
         pool = new HashSet<>(N);
+        System.out.println("List of threads ids:");
         for(int i = 0; i < N; i++){
-            pool.add(new ElementaryThread());
+            ElementaryThread et = new ElementaryThread(); 
+            System.out.println(et.getId());
+            pool.add(et);  
         }
+        System.out.println("----------------------------");
+        currentMinId = getCurrentMinId(0);
     }
     
+    // запустить ThreadPool
     public void start(){
-        Iterator it = pool.iterator();
-        while(it.hasNext()){
-            Thread t = (Thread) it.next();
-            t.start();
-        }
+        Iterator<Thread> it = pool.iterator();
+        while(it.hasNext())
+            it.next().start();
     }
     
-    protected class ElementaryThread extends Thread{
+    // вычисление минимального id не меньше min
+    private long getCurrentMinId(long min){
+        Iterator<Thread> it = pool.iterator();
+        long currentMin = Long.MAX_VALUE;
+        while(it.hasNext()){
+            long id = it.next().getId();
+            if(id > min && id < currentMin)
+                currentMin = id;
+        }
+        System.out.println("currentMinId = " + currentMin);
+        return currentMin;
+    }
+    
+    /**
+     * Класс элементарного потока
+     */
+    private class ElementaryThread extends Thread{
+        
+        private Object waitObject;
+        
+        //конструктор
+        public ElementaryThread() {
+            this.waitObject = new Object();
+        }
+        
         @Override
         public void run(){
-            System.out.println("ThreadName is " + Thread.currentThread().getName());
-        }
+            long id = Thread.currentThread().getId();
+            synchronized(waitObject){
+                // если id текущего потока больше чем минимальный - ждём
+                while(id > currentMinId){
+                    try {
+                        waitObject.wait(3000);
+                    } catch (InterruptedException ex) { }
+                }
+                // изменяем минимальный id
+                //currentMinId = getCurrentMinId(currentMinId);
+                currentMinId++;
+                // выводим текущий id
+                System.out.println(id);
+                // запускаем остальных для проверки
+                waitObject.notifyAll();
+            }
+        }    
     }
-    
 }
+    
