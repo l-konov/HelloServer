@@ -47,9 +47,7 @@ public class Frontend extends AbstractHandler implements Runnable{
             else{
                 id = handleCount.incrementAndGet();
             }
-        } catch(Exception e){
-            //id = i.incrementAndGet();
-        }
+        } catch(Exception e){ }
         // формируем страницу
         response.setContentType("text/html; charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
