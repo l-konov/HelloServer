@@ -11,7 +11,7 @@ public class Main {
 //        tp.start();
         // запускаем фронтенд
         Frontend fe = new Frontend();
-       
+        new Thread(fe).start();
         // запускаем jetty
         Server jettyServer = new Server(8080);
         jettyServer.setHandler(fe);
@@ -20,9 +20,7 @@ public class Main {
             jettyServer.join();
         } catch (InterruptedException ex) {
             ex.printStackTrace();
-        }
-        
-        fe.start(); 
+        } 
     }
     
 }
