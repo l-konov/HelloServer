@@ -12,7 +12,7 @@ package ru.leonid;
 public class PageGenerator {
     private String pageHtml;
 
-    public PageGenerator(int id) {
+    public PageGenerator(String message, int id) {
         pageHtml = "<!DOCTYPE html>" 
                 + "<html xmlns=\"http://www.w3.org/1999/xhtml\">"
                 + "<head>"
@@ -25,7 +25,7 @@ public class PageGenerator {
                 + "</head>"
                 + "<body>"
                 + "<form name=\"userForm\" action=\"/\" method=\"post\">"
-                + "<h1>Hello User! Your Id is " + id +  "</h1>"
+                + "<h1>" + message + id +  "</h1>"
                 + "<input name=\"id\" value=\"" + id + "\" hidden>"
                 + "<input type=\"submit\" value=\"Submit\">"
                 + "</form>"

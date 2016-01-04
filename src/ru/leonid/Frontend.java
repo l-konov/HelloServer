@@ -6,16 +6,11 @@
 package ru.leonid;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
 /**
@@ -23,12 +18,12 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
  * @author Julia
  */
 public class Frontend extends AbstractHandler implements Runnable{
-
+    
+    private AtomicInteger handleCount;
+    
     public Frontend() {
         this.handleCount = new AtomicInteger(0);
     }
-    
-    private AtomicInteger handleCount;
 
     @Override
     public void handle(String target, 
@@ -38,22 +33,25 @@ public class Frontend extends AbstractHandler implements Runnable{
             throws IOException, javax.servlet.ServletException 
     {
         // обрабатываем входные параметры запроса
-        int id = 0;
-        try{
-            String idS = request.getParameter("id");
-            if(idS != null){
-                id = Integer.parseInt(idS);
-            }
-            else{
-                id = handleCount.incrementAndGet();
-            }
-        } catch(Exception e){ }
-        // формируем страницу
-        response.setContentType("text/html; charset=utf-8");
-        response.setStatus(HttpServletResponse.SC_OK);
-        rqst.setHandled(true);
-        PageGenerator pg = new PageGenerator(id);
-        response.getWriter().println(pg.getPageHtml());
+        int id = 1;
+
+        if(!request.getMethod().toLowerCase().equals("post") || request.getParameter("id") == null) {
+            // формируем страницу
+            response.setContentType("text/html; charset=utf-8");
+            response.setStatus(HttpServletResponse.SC_OK);
+            rqst.setHandled(true);
+            PageGenerator pg = new PageGenerator("Your id is ", handleCount.incrementAndGet());
+            response.getWriter().println(pg.getPageHtml());
+        } else {
+            String idParameter = request.getParameter("id");
+            id = Integer.parseInt(idParameter);
+            // формируем страницу
+            response.setContentType("text/html; charset=utf-8");
+            response.setStatus(HttpServletResponse.SC_OK);
+            rqst.setHandled(true);
+            PageGenerator pg = new PageGenerator("Hello user! Your id is ", id);
+            response.getWriter().println(pg.getPageHtml());
+        }
     }
 
     @Override
