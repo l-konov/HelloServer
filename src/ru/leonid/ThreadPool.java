@@ -79,7 +79,7 @@ public class ThreadPool {
                 //currentMinId = getCurrentMinId(currentMinId);
                 currentMinId++;
                 // выводим текущий id
-                System.out.println(id);
+                System.out.println(id + ", " + currentMinId);
                 // запускаем остальных для проверки
                 waitObject.notifyAll();
             }
