@@ -5,6 +5,7 @@
  */
 package ru.leonid;
 
+import ru.leonid.frontend.PageGenerator;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 

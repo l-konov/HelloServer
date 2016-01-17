@@ -5,13 +5,18 @@ import ru.leonid.base.Address;
 import ru.leonid.base.Frontend;
 
 public class MsgUpdateUserId extends MsgToFrontend {
+    
+        String name;
+        Integer id;
 
-	public MsgUpdateUserId(Address from, Address to) {
+	public MsgUpdateUserId(Address from, Address to, String name, Integer id) {
 		super(from, to);
+                this.name = name;
+                this.id = id;
 	}
 
 	public void exec(Frontend frontend) {
-		System.out.print("Address of Frontend: " + frontend.getAddress().getAbonentId() + '\n');		
+                frontend.setId(name, id);		
 	}
 
 }

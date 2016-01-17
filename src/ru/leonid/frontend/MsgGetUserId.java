@@ -5,13 +5,15 @@ import ru.leonid.base.AccountService;
 import ru.leonid.base.Address;
 
 public class MsgGetUserId extends MsgToAS {
-
-	public MsgGetUserId(Address from, Address to) {
+        String name;
+    
+	public MsgGetUserId(Address from, Address to, String name) {
 		super(from, to);
+                this.name = name;
 	}
 
 	public void exec(AccountService accountService) {
-		System.out.print("Address of Account Service: " + accountService.getAddress().getAbonentId() + '\n');
-		accountService.getMessageSystem().sendMessage(new MsgUpdateUserId(getTo(), getFrom()));
+                Integer id = accountService.getUserId(name);                
+		accountService.getMessageSystem().sendMessage(new MsgUpdateUserId(getTo(), getFrom(), name, id));
 	}
 }

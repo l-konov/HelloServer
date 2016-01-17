@@ -21,6 +21,11 @@ public class MessageSystemImpl implements MessageSystem {
 		addressService.setAddressAS(abonent.getAddress());
 		messages.put(abonent.getAddress(), new ArrayBlockingQueue<Msg>(QUEUE_SIZE));
 	}
+        
+        public void addGameMechanics(Abonent abonent){
+                addressService.setAddressGM(abonent.getAddress());
+                messages.put(abonent.getAddress(), new ArrayBlockingQueue<Msg>(QUEUE_SIZE));
+        }
 	
 	public void sendMessage(Msg message){
 		Queue<Msg> messageQueue = messages.get(message.getTo());
