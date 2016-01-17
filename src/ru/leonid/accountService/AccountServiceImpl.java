@@ -11,12 +11,12 @@ public class AccountServiceImpl implements AccountService, Runnable{
 	private Address address = Address.getNew();
 	private MessageSystem messageSystem;
         
-        private Map<String, Integer> fakeAccounter = new HashMap<String, Integer>();
+        private Map<String, Integer> accounter = new HashMap<String, Integer>();
 	
 	public AccountServiceImpl(MessageSystem messageSystem){
 		this.messageSystem = messageSystem;
-                this.fakeAccounter.put("Tully", 1);
-		this.fakeAccounter.put("Sully", 2);
+                this.accounter.put("Tully", 1);
+		this.accounter.put("Sully", 2);
 	}
 	
 	public void run(){
@@ -28,7 +28,9 @@ public class AccountServiceImpl implements AccountService, Runnable{
         
         public Integer getUserId(String name){
             TimeHelper.sleep(5000);
-            return fakeAccounter.get(name);
+            //if(accounter.containsKey(name))
+                return accounter.get(name);
+            
         }
 
 	public Address getAddress() {

@@ -10,12 +10,16 @@ package ru.leonid.frontend;
  * @author Julia
  */
 public class PageGenerator {
-    private String pageHtml;
+    private String title = "HelloServer";
 
-    public PageGenerator(String message, int id) {
-        pageHtml = "<!DOCTYPE html>" 
+    public PageGenerator() {
+    }
+    
+    public String getTextPage(String message, int id){
+        return "<!DOCTYPE html>" 
                 + "<html xmlns=\"http://www.w3.org/1999/xhtml\">"
                 + "<head>"
+                + "<title>" + title + "</title>"                
                 + "<!-- <meta http-equiv=\"refresh\" content=\"1\"> -->"
                 + "<!-- script>"
                 + "window.onLoad() = function() {" 
@@ -25,19 +29,72 @@ public class PageGenerator {
                 + "</head>"
                 + "<body>"
                 + "<form name=\"userForm\" action=\"/\" method=\"post\">"
-                + "<h1>" + message + id +  "</h1>"
+                + "<h1>" + message +  "</h1>"
                 + "<input name=\"id\" value=\"" + id + "\" hidden>"
                 + "<input type=\"submit\" value=\"Submit\">"
                 + "</form>"
                 + "</body>";
     }
     
-    public String getPageHtml() {
-        return pageHtml;
-    }
-
-    public void setPageHtml(String pageHtml) {
-        this.pageHtml = pageHtml;
-    }    
+    public String getTextPage(String message){
+        return "<!DOCTYPE html>" 
+                + "<html xmlns=\"http://www.w3.org/1999/xhtml\">"
+                + "<head>"
+                + "<title>" + title + "</title>"                
+                + "<!-- <meta http-equiv=\"refresh\" content=\"1\"> -->"
+                + "<!-- script>"
+                + "window.onLoad() = function() {" 
+                + "  document.getElementById(\"userForm\").submit();" 
+                + "};"
+                + "</script -->"
+                + "</head>"
+                + "<body>"
+                + "<form name=\"userForm\" action=\"/\" method=\"post\">"
+                + "<h1>" + message + "</h1>"
+                + "<input type=\"submit\" value=\"Submit\">"
+                + "</form>"
+                + "</body>";
+    }  
     
+    public String getInputNamePage(){
+        return "<!DOCTYPE html>" 
+                + "<html xmlns=\"http://www.w3.org/1999/xhtml\">"
+                + "<head>"
+                + "<title>" + title + "</title>"                
+                + "<!-- <meta http-equiv=\"refresh\" content=\"1\"> -->"
+                + "<!-- script>"
+                + "window.onLoad() = function() {" 
+                + "  document.getElementById(\"userForm\").submit();" 
+                + "};"
+                + "</script -->"
+                + "</head>"
+                + "<body>"
+                + "<form name=\"userForm\" action=\"/\" method=\"post\">"
+                + "<h1>Введите имя пользователя</h1>"
+                + "<input name=\"name\">"
+                + "<input type=\"submit\" value=\"Submit\">"
+                + "</form>"
+                + "</body>";
+    } 
+    
+    public String getAuthorizationPage(String name){
+        return "<!DOCTYPE html>" 
+                + "<html xmlns=\"http://www.w3.org/1999/xhtml\">"
+                + "<head>"
+                + "<title>" + title + "</title>"
+                + "<!-- <meta http-equiv=\"refresh\" content=\"1\"> -->"
+                + "<!-- script>"
+                + "window.onLoad() = function() {" 
+                + "  document.getElementById(\"userForm\").submit();" 
+                + "};"
+                + "</script -->"
+                + "</head>"
+                + "<body>"
+                + "<form name=\"userForm\" action=\"/\" method=\"post\">"
+                + "<h1>Подождите.... Происходит авторизация</h1>"
+                + "<input name=\"name\" value=\"" + name + "\" hidden>"
+                + "<input type=\"submit\" value=\"Submit\">"
+                + "</form>"
+                + "</body>";
+    }  
 }

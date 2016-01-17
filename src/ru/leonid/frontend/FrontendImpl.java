@@ -28,6 +28,47 @@ public class FrontendImpl extends AbstractHandler implements Frontend, Runnable{
         this.messageSystem = messageSystem;
     }
 
+    public void handle(String target, Request baseRequest,
+            HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        PageGenerator pageGenerator = new PageGenerator();
+        response.setContentType("text/html; charset=utf-8");
+        response.setStatus(HttpServletResponse.SC_OK);
+        baseRequest.setHandled(true);        
+        // первый запрос от пользователя. Выводим страницу ввода имени
+        if(!request.getMethod().toLowerCase().equals("post") || request.getParameter("name") == null) {
+            response.getWriter().println(pageGenerator.getInputNamePage());
+        }        
+        // Обработка ответа пользователя, если в ответе присутствует имя
+        else if(request.getMethod().toLowerCase().equals("post") && request.getParameter("name") != null){
+            String userName = request.getParameter("name");
+            Integer ID = nameToId.get(userName);
+            if(ID != null){
+                response.getWriter().println(pageGenerator.getTextPage("User name: " + userName + " Id: " + ID, ID));
+            } else {
+                response.getWriter().println(pageGenerator.getAuthorizationPage(userName));
+                Address addressAS =  messageSystem.getAddressService().getAddressAS();
+                messageSystem.sendMessage(new MsgGetUserId(getAddress(), addressAS, userName));
+            }
+        }
+        
+//        if(!request.getMethod().toLowerCase().equals("post") || request.getParameter("id") == null) {
+//            response.setContentType("text/html; charset=utf-8");
+//            response.setStatus(HttpServletResponse.SC_OK);
+//            baseRequest.setHandled(true);
+//            PageGenerator pg = new PageGenerator("Your id is ", handleCount.incrementAndGet());
+//            response.getWriter().println(pg.getPageHtml());
+//        } else {
+//            String idParameter = request.getParameter("id");
+//            id = Integer.parseInt(idParameter);
+//            response.setContentType("text/html; charset=utf-8");
+//            response.setStatus(HttpServletResponse.SC_OK);
+//            baseRequest.setHandled(true);
+//            PageGenerator pg = new PageGenerator("Hello user! Your id is ", id);
+//            response.getWriter().println(pg.getPageHtml());
+//        }        
+    }
+
     public void run(){
         while(true){
             messageSystem.execForAbonent(this);
@@ -37,45 +78,8 @@ public class FrontendImpl extends AbstractHandler implements Frontend, Runnable{
 
     public Address getAddress() {
         return address;
-    }
-
-    public void handle(String target, Request baseRequest,
-            HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
-        
-        String name = "Tully";
-        Integer ID = nameToId.get(name);
-        if(ID != null){
-            response.getWriter().println("<h1>User name: " + name + " Id: " + ID +"</h1>");
-        } else{
-            response.getWriter().println("<h1>Wait for authorization</h1>");
-            Address addressAS =  messageSystem.getAddressService().getAddressAS();
-            messageSystem.sendMessage(new MsgGetUserId(getAddress(), addressAS, name));
-        }
-        
-        
-        
-        
-        if(!request.getMethod().toLowerCase().equals("post") || request.getParameter("id") == null) {
-            response.setContentType("text/html; charset=utf-8");
-            response.setStatus(HttpServletResponse.SC_OK);
-            baseRequest.setHandled(true);
-            PageGenerator pg = new PageGenerator("Your id is ", handleCount.incrementAndGet());
-            response.getWriter().println(pg.getPageHtml());
-        } else {
-            String idParameter = request.getParameter("id");
-            id = Integer.parseInt(idParameter);
-            response.setContentType("text/html; charset=utf-8");
-            response.setStatus(HttpServletResponse.SC_OK);
-            baseRequest.setHandled(true);
-            PageGenerator pg = new PageGenerator("Hello user! Your id is ", id);
-            response.getWriter().println(pg.getPageHtml());
-        }        
-        
-        Address addressAS =  messageSystem.getAddressService().getAddressAS();
-        messageSystem.sendMessage(new MsgGetUserId(getAddress(), addressAS, name));
-    }
-
+    }    
+    
     public MessageSystem getMessageSystem(){
         return messageSystem;
     }
