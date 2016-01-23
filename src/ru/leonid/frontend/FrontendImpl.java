@@ -36,15 +36,15 @@ public class FrontendImpl extends AbstractHandler implements Frontend, Runnable{
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);        
         // первый запрос от пользователя. Выводим страницу ввода имени
-        if(!request.getMethod().toLowerCase().equals("post") || request.getParameter("name") == null) {
+        if(!request.getMethod().equals("POST") || request.getParameter("name") == null) {
             response.getWriter().println(pageGenerator.getInputNamePage());
         }        
         // Обработка ответа пользователя, если в ответе присутствует имя
-        else if(request.getMethod().toLowerCase().equals("post") && request.getParameter("name") != null){
+        else if(request.getMethod().equals("POST") && request.getParameter("name") != null){
             String userName = request.getParameter("name");
             Integer ID = nameToId.get(userName);
             if(ID != null){
-                response.getWriter().println(pageGenerator.getTextPage("User name: " + userName + " Id: " + ID, ID));
+                response.getWriter().println(pageGenerator.getTextPage("User name: " + userName + "\t Id: " + ID, ID));
             } else {
                 response.getWriter().println(pageGenerator.getAuthorizationPage(userName));
                 Address addressAS =  messageSystem.getAddressService().getAddressAS();
@@ -72,8 +72,13 @@ public class FrontendImpl extends AbstractHandler implements Frontend, Runnable{
     public void run(){
         while(true){
             messageSystem.execForAbonent(this);
+            removeDeadUsers();
             TimeHelper.sleep(10);
         }
+    }
+    
+    private void removeDeadUsers(){
+        // TODO implement
     }
 
     public Address getAddress() {

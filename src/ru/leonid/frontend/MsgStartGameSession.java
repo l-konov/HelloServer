@@ -15,8 +15,12 @@ import ru.leonid.messageSystem.MsgToGM;
  */
 public class MsgStartGameSession extends MsgToGM{
 
-    public MsgStartGameSession(Address from, Address to) {
+    int id1, id2;
+    
+    public MsgStartGameSession(Address from, Address to, int id1, int id2) {
         super(from, to);
+        this.id1 = id1;
+        this.id2 = id2;
     }
 
     @Override

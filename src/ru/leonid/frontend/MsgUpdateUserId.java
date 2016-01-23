@@ -5,7 +5,6 @@ import ru.leonid.base.Address;
 import ru.leonid.base.Frontend;
 
 public class MsgUpdateUserId extends MsgToFrontend {
-    
         String name;
         Integer id;
 
