@@ -15,7 +15,7 @@ public class MsgUpdateUserId extends MsgToFrontend {
 	}
 
 	public void exec(Frontend frontend) {
-                frontend.setId(name, id);		
+                frontend.createUser(name, id);		
 	}
 
 }
