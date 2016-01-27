@@ -9,12 +9,7 @@ public class GameMechanicsImpl implements GameMechanics,Runnable{
     private MessageSystem messageSystem;
     private Address address = Address.getNew();
     private GameSession gameSession;
-
-    public void startGameSession(int id1, int id2) {
-        gameSession = new GameSession(id1, id2);
-        gameSession.startGame();
-    }
-    
+ 
     // все данные о партии игроков
     class GameSession implements Runnable{
         int id1;
@@ -67,23 +62,20 @@ public class GameMechanicsImpl implements GameMechanics,Runnable{
         this.messageSystem = messageSystem;
     }
     
-    @Override
-    public MessageSystem getMessageSystem() {
-        return messageSystem;
-    }
+    public MessageSystem getMessageSystem() { return messageSystem;  }
+    public Address getAddress() { return address; }
 
-    @Override
-    public Address getAddress() {
-        return address;
-    }
-
-    @Override
     public void run() {
         while(true){
             messageSystem.execForAbonent(this);
             TimeHelper.sleep(10);
         }
     }
+    
+    public void startGameSession(int id1, int id2) {
+        gameSession = new GameSession(id1, id2);
+        gameSession.startGame();
+    }    
     
     public void increment(int id){
         getGameSession().increment(id);
