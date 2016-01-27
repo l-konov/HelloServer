@@ -2,7 +2,6 @@ package ru.leonid.gameMechanics;
 
 import ru.leonid.base.Address;
 import ru.leonid.base.GameMechanics;
-import ru.leonid.base.GameSession;
 import ru.leonid.base.MessageSystem;
 import ru.leonid.utils.TimeHelper;
 
@@ -12,12 +11,12 @@ public class GameMechanicsImpl implements GameMechanics,Runnable{
     private GameSession gameSession;
 
     public void startGameSession(int id1, int id2) {
-        gameSession = new GameSessionImpl(id1, id2);
+        gameSession = new GameSession(id1, id2);
         gameSession.startGame();
     }
     
     // все данные о партии игроков
-    class GameSessionImpl implements Runnable, GameSession{
+    class GameSession implements Runnable{
         int id1;
         int id2;
         int result1;
@@ -26,8 +25,7 @@ public class GameMechanicsImpl implements GameMechanics,Runnable{
         
         private final long GAMEPERIOD = 10000;
 
-        public GameSessionImpl(int id1, int id2) {
-            super();
+        public GameSession(int id1, int id2) {
             this.id1 = id1;
             this.id2 = id2;
             this.result1 = 0;
@@ -85,6 +83,10 @@ public class GameMechanicsImpl implements GameMechanics,Runnable{
             messageSystem.execForAbonent(this);
             TimeHelper.sleep(10);
         }
+    }
+    
+    public void increment(int id){
+        getGameSession().increment(id);
     }
 
     public GameSession getGameSession() {
