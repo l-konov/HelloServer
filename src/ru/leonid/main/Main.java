@@ -4,9 +4,6 @@ import ru.leonid.messageSystem.MessageSystemImpl;
 import org.eclipse.jetty.server.Server;
 import ru.leonid.accountService.AccountServiceImpl;
 import ru.leonid.base.Abonent;
-import ru.leonid.base.AccountService;
-import ru.leonid.base.Frontend;
-import ru.leonid.base.GameMechanics;
 import ru.leonid.frontend.FrontendImpl;
 import ru.leonid.gameMechanics.GameMechanicsImpl;
 
