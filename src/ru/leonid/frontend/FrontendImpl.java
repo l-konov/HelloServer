@@ -154,7 +154,9 @@ public class FrontendImpl extends AbstractHandler implements Frontend, Runnable{
                     opponentId = user.getOpponentId();
                     user2 = users.get(opponentId);
                     User winner = users.get(winnerId);
-                    responsePW.println(pageGenerator.getResultPage(id, user.getName(), user.getScore(), opponentId, user2.getName(), user2.getScore(), winner.getName()));
+                    responsePW.println(pageGenerator.getResultPage(id, user.getName(), user.getScore(), 
+                            opponentId, user2.getName(), user2.getScore(), 
+                            winner.getName()));
                     break;       
             }
         }       

@@ -9,14 +9,17 @@ public class GameMechanicsImpl implements GameMechanics,Runnable{
     private MessageSystem messageSystem;
     private Address address = Address.getNew();
     private GameSession gameSession;
- 
+    
     // все данные о партии игроков
     class GameSession implements Runnable{
         int id1;
         int id2;
         int result1;
         int result2;
+        
         long startTime;
+        
+        Address addressFrontend = messageSystem.getAddressService().getAddressFrontend();
         
         private final long GAMEPERIOD = 30000;
 
@@ -25,7 +28,6 @@ public class GameMechanicsImpl implements GameMechanics,Runnable{
             this.id2 = id2;
             this.result1 = 0;
             this.result2 = 0;
-            Address addressFrontend = messageSystem.getAddressService().getAddressFrontend();
             messageSystem.sendMessage(new MsgStartGame(getAddress(), addressFrontend, id1, id2));
         }
         
@@ -47,8 +49,8 @@ public class GameMechanicsImpl implements GameMechanics,Runnable{
         }
 
         public void run() {
-            Address addressFrontend = messageSystem.getAddressService().getAddressFrontend();
-            while(System.currentTimeMillis() - startTime > GAMEPERIOD){
+            
+            while(System.currentTimeMillis() - startTime < GAMEPERIOD){
                 // периодически посылаем реплику на фронтенд  
                 messageSystem.sendMessage(new MsgSendGameReplica(getAddress(), addressFrontend, id1, id2, result1, result2));
                 TimeHelper.sleep(100);

@@ -30,7 +30,7 @@ public class MsgFinishGame extends MsgToFrontend{
     @Override
     public void exec(Frontend frontend) {
         // функция отображающая экран с результатами игры
-        frontend.finish(id1, id2, id1, id2, winnerId);
+        frontend.finish(id1, id2, result1, result2, winnerId);
     }
     
 }

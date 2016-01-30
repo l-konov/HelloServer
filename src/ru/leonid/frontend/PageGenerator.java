@@ -80,7 +80,7 @@ public class PageGenerator {
     }
     
     public String getClickPage(int id1, String name1, int score1, int id2, String name2, int score2){
-        String form = "<h1>Нажимайте на Кнопку как можно чаще</h1>"
+        String form = "<h1>Нажимайте на + как можно чаще</h1>"
                 + "<table>"
                 + "<tr>"
                 + "<td>" + name1 + "</td><td>" + name2 + "</td>"
@@ -94,7 +94,9 @@ public class PageGenerator {
         return preparePage(form, -1);
     }
     
-    public String getResultPage(int id1, String name1, int score1, int id2, String name2, int score2, String winnerName){
+    public String getResultPage(int id1, String name1, int score1, 
+            int id2, String name2, int score2, 
+            String winnerName){
         //результаты и предложение начать новую игру
         String form = "<h1>Игра окончена</h1>"
                 + "<h1>Победитель " + winnerName + "</h1>"
