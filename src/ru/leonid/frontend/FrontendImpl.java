@@ -137,12 +137,13 @@ public class FrontendImpl extends AbstractHandler implements Frontend, Runnable{
                     opponentId = user.getOpponentId();
                     user2 = users.get(opponentId);
                     messageSystem.sendMessage(new MsgIncrement(getAddress(), addressGM, id)); // отсылаем сообщение о клике по кнопке
-                    responsePW.println(pageGenerator.getClickPage(id, user.getName(), opponentId, user2.getName()));
+                    responsePW.println(pageGenerator.getClickPage(id, user.getName(), user.getScore(), opponentId, user2.getName(), user2.getScore()));
                     break;
                 case RESULT:
                     opponentId = user.getOpponentId();
                     user2 = users.get(opponentId);
-                    responsePW.println(pageGenerator.getResultPage(id, user.getName(), opponentId, user2.getName(), winnerId));
+                    User winner = users.get(winnerId);
+                    responsePW.println(pageGenerator.getResultPage(id, user.getName(), user.getScore(), opponentId, user2.getName(), user2.getScore(), winner.getName()));
                     break;       
             }
         } else { // пользователь не авторизован
