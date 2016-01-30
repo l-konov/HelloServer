@@ -71,8 +71,8 @@ public class PageGenerator {
     }  
     
     public String getStartingGamePage(int id, String name, boolean waiting){
-        String form = "<h1>Вы успешно авторизованы.</h1>"
-                + "<h2>Пользователь: " + name + "ID: " + id + "</h2>";
+        String form = "<h2>Вы успешно авторизованы.</h2>"
+                + "<h1>Пользователь: " + name + " ID: " + id + "</h1>";
         if(waiting) form += "<h2>Ожидание других игрков....</h2>";
         form += "<input name=\"id\" value=\"" + id + "\" hidden>"
                 + "<input type=\"submit\" value=\"Submit\">";
