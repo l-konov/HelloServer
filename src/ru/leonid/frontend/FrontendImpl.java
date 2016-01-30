@@ -104,39 +104,36 @@ public class FrontendImpl extends AbstractHandler implements Frontend, Runnable{
         
         // пользователь ещё не авторизован
         if(request.getParameter("id") == null){
-            if(request.getParameter("name") != null){
+            if(request.getParameter("name") == null){
+                responsePW.println(pageGenerator.getInputNamePage()); // окно ввода имени пользователя                
+            } else {
                 String userName = request.getParameter("name");
                 User user = usersStr.get(userName);                
-                if(user != null){ // авторизация прошла
+                if(user == null){ // авторизация не прошла
+                    responsePW.println(pageGenerator.getAuthorizationPage(userName));
+                    messageSystem.sendMessage(new MsgGetUserId(getAddress(), addressAS, userName)); // отсылаем сообщение с запросом о получении id для пользователя                                        
+                } else { // авторизация прошла
                     int id = user.getId();
                     responsePW.println(pageGenerator.getStartingGamePage(id, user.getName(), false));
                     if(waitingUser == null) {
                         waitingUser = user;
                         user.setState(State.WAITING_PLAYER);
-                    } else{
-                        if(waitingUser.getId() != id) {
-                            messageSystem.sendMessage(new MsgStartGameSession(getAddress(), addressGM, id, waitingUser.getId()));
-                            waitingUser = null;
-                        }    
-                    }                    
-                } else { // авторизация ещё не прошла
-                    responsePW.println(pageGenerator.getAuthorizationPage(userName));
-                    messageSystem.sendMessage(new MsgGetUserId(getAddress(), addressAS, userName)); // отсылаем сообщение с запросом о получении id для пользователя                                        
-                }
-            } else {
-                responsePW.println(pageGenerator.getInputNamePage());
-            }             
+                    }                   
+                } 
+            }              
         }
         
         // пользователь авторизован
         if(request.getParameter("id") != null){
-            int id = Integer.parseInt(request.getParameter("id"));
-            User user = users.get(id);
             int opponentId;
             User user2;
+            int id = Integer.parseInt(request.getParameter("id"));
+            User user = users.get(id);
             switch(user.getState()){
                 case NONE:
-                    responsePW.println(pageGenerator.getStartingGamePage(id, user.getName(), false));
+                case WAITING_PLAYER:
+                    boolean waiting = user.getState().equals(State.WAITING_PLAYER);
+                    responsePW.println(pageGenerator.getStartingGamePage(id, user.getName(), waiting));
                     if(waitingUser == null) {
                         waitingUser = user;
                         user.setState(State.WAITING_PLAYER);
@@ -146,15 +143,6 @@ public class FrontendImpl extends AbstractHandler implements Frontend, Runnable{
                             waitingUser = null;
                         } 
                     }
-                    break;
-                case WAITING_PLAYER:
-                    responsePW.println(pageGenerator.getStartingGamePage(id, user.getName(), true));
-                    if(waitingUser != null){
-                        if(waitingUser.getId() != id) {
-                            messageSystem.sendMessage(new MsgStartGameSession(getAddress(), addressGM, id, waitingUser.getId())); // отсылаем сообщение о начале игровой сессии
-                            waitingUser = null;
-                        }
-                    } 
                     break;
                 case PLAYING:
                     opponentId = user.getOpponentId();
@@ -179,10 +167,12 @@ public class FrontendImpl extends AbstractHandler implements Frontend, Runnable{
         }
     }
 
-    public void createUser(String name, Integer id) {
-        User u = new User(name, id);
-        usersStr.put(name, u);
-        users.put(id, u);
+    public void setUserId(String name, Integer id) {
+        if(!usersStr.containsKey(name)){
+            User u = new User(name, id);
+            usersStr.put(name, u);
+            users.put(id, u);
+        }
     }
     
     public void refresh(int id1, int id2, int result1, int result2){

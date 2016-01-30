@@ -18,7 +18,7 @@ public class GameMechanicsImpl implements GameMechanics,Runnable{
         int result2;
         long startTime;
         
-        private final long GAMEPERIOD = 10000;
+        private final long GAMEPERIOD = 30000;
 
         public GameSession(int id1, int id2) {
             this.id1 = id1;
@@ -40,8 +40,10 @@ public class GameMechanicsImpl implements GameMechanics,Runnable{
         }
         
         private int getWinner(){
-            if(result1 >= result2) return id1;
-            else return id2;
+            if(result1 >= result2) 
+                return id1;
+            else 
+                return id2;
         }
 
         public void run() {

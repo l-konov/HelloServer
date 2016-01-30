@@ -59,14 +59,14 @@ public class PageGenerator {
     public String getInputNamePage(){
         String form = "<h1>Введите имя пользователя</h1>"
                 + "<input name=\"name\">"
-                + "<input type=\"submit\" value=\"Submit\">";
+                + "<input type=\"submit\" value=\"Отправить\">";
         return preparePage(form, -1);
     } 
     
     public String getAuthorizationPage(String name){
         String form = "<h1>Подождите.... Происходит авторизация</h1>"
                 + "<input name=\"name\" value=\"" + name + "\" hidden>"
-                + "<input type=\"submit\" value=\"Submit\">";
+                + "<input type=\"submit\" value=\"Обновить\">";
         return preparePage(form, -1);
     }  
     
@@ -75,7 +75,7 @@ public class PageGenerator {
                 + "<h1>Пользователь: " + name + " ID: " + id + "</h1>";
         if(waiting) form += "<h2>Ожидание других игрков....</h2>";
         form += "<input name=\"id\" value=\"" + id + "\" hidden>"
-                + "<input type=\"submit\" value=\"Submit\">";
+                + "<input type=\"submit\" value=\"Обновить\">";
         return preparePage(form, -1);
     }
     
@@ -100,14 +100,14 @@ public class PageGenerator {
                 + "<h1>Победитель " + winnerName + "</h1>"
                 + "<table>"
                 + "<tr>"
-                + "<td>" + name1 + "</td><td>" + name2 + "</td>"
+                + "<td>Игроки: </td><td>" + name1 + "</td><td>" + name2 + "</td>"
                 + "</tr>"
                 + "<tr>"
-                + "<td>" + score1 + "</td><td>" + score2 + "</td>"
+                + "<td>Счёт: </td><td>" + score1 + "</td><td>" + score2 + "</td>"
                 + "</tr>"
                 + "</table>"
                 + "<input name=\"id\" value=\"" + id1 + "\" hidden>"
-                + "<input type=\"submit\" value=\"+\">";
+                + "<input type=\"submit\" value=\"Обновить\">";
         return preparePage(form, -1);
     }
     
