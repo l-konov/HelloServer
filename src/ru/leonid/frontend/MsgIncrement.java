@@ -1,5 +1,5 @@
 
-package ru.leonid.gameMechanics;
+package ru.leonid.frontend;
 
 import ru.leonid.base.Address;
 import ru.leonid.base.GameMechanics;

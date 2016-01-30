@@ -1,5 +1,6 @@
 package ru.leonid.frontend;
 
+import ru.leonid.accountService.MsgUpdateUserId;
 import ru.leonid.messageSystem.MsgToAS;
 import ru.leonid.base.AccountService;
 import ru.leonid.base.Address;

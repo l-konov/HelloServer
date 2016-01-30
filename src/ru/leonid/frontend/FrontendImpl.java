@@ -19,7 +19,6 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 import ru.leonid.base.Address;
 import ru.leonid.base.Frontend;
 import ru.leonid.base.MessageSystem;
-import ru.leonid.gameMechanics.MsgIncrement;
 
 import ru.leonid.utils.TimeHelper;
 
@@ -47,6 +46,7 @@ public class FrontendImpl extends AbstractHandler implements Frontend, Runnable{
         private int id;
         private int score;
         private State state;
+        private int opponentId;
 
         public User(String name, int id) {
             this.name = name;
@@ -71,6 +71,12 @@ public class FrontendImpl extends AbstractHandler implements Frontend, Runnable{
         }
         public void setState(State state) {
             this.state = state;
+        }
+        public int getOpponentId() {
+            return opponentId;
+        }
+        public void setOpponentId(int opponentId) {
+            this.opponentId = opponentId;
         }
     }
 
@@ -100,19 +106,44 @@ public class FrontendImpl extends AbstractHandler implements Frontend, Runnable{
         if(request.getParameter("id") != null){
             int id = Integer.parseInt(request.getParameter("id"));
             User user = users.get(id);
+            int opponentId;
+            User user2;
             switch(user.getState()){
                 case NONE:
-                    
-                    responsePW.println(pageGenerator.getStartingGamePage(id));
-                    //getTextPage("User name: " + user.getName() + "\t Id: " + id, id));                   
+                    responsePW.println(pageGenerator.getStartingGamePage(id, user.getName(), false));
+                    if(waitingList.isEmpty()) {
+                        waitingList.add(user);
+                        user.setState(State.WAITING_PLAYER);
+                    } else{
+                        for(User u2 : waitingList)
+                            if(u2.getId() != id) {
+                                messageSystem.sendMessage(new MsgStartGameSession(getAddress(), addressGM, id, u2.getId()));
+                                waitingList.remove(u2);
+                            }
+                    }
+                    break;
+                case WAITING_PLAYER:
+                    responsePW.println(pageGenerator.getStartingGamePage(id, user.getName(), true));
+                    if(waitingList.size() > 1){
+                        for(User u2 : waitingList)
+                            if(u2.getId() != id) {
+                                messageSystem.sendMessage(new MsgStartGameSession(getAddress(), addressGM, id, u2.getId())); // отсылаем сообщение о начале игровой сессии
+                                waitingList.remove(u2); // удаляем пользоватей из очереди
+                                waitingList.remove(users.get(id));
+                            }
+                    } 
                     break;
                 case PLAYING:
-                    responsePW.println(pageGenerator.getClickPage(id));
+                    opponentId = user.getOpponentId();
+                    user2 = users.get(opponentId);
+                    messageSystem.sendMessage(new MsgIncrement(getAddress(), addressGM, id)); // отсылаем сообщение о клике по кнопке
+                    responsePW.println(pageGenerator.getClickPage(id, user.getName(), opponentId, user2.getName()));
                     break;
                 case RESULT:
-                    responsePW.println(pageGenerator.getResultPage(id));
-                    break;
-                    
+                    opponentId = user.getOpponentId();
+                    user2 = users.get(opponentId);
+                    responsePW.println(pageGenerator.getResultPage(id, user.getName(), opponentId, user2.getName(), winnerId));
+                    break;       
             }
         } else { // пользователь не авторизован
             if(request.getParameter("name") != null){
@@ -120,78 +151,12 @@ public class FrontendImpl extends AbstractHandler implements Frontend, Runnable{
                 Integer id = nameToId.get(userName);
                 if(id == null){
                     responsePW.println(pageGenerator.getAuthorizationPage(userName));
-                    messageSystem.sendMessage(new MsgGetUserId(getAddress(), addressAS, userName));
-                    return;
+                    messageSystem.sendMessage(new MsgGetUserId(getAddress(), addressAS, userName)); // отсылаем сообщение с запросом о получении id для пользователя
                 }
             } else {
                 responsePW.println(pageGenerator.getInputNamePage());
-                return;
             }        
         }       
-        
-        
-        
-        
-        
-        
-//        if(!request.getMethod().equals("POST")){
-//            // первый запрос от пользователя. Выводим страницу ввода имени
-//            if(request.getParameter("name") == null) 
-//                
-//            return;
-//        }
-//        if(request.getParameter("name") != null){
-//            String userName = request.getParameter("name");
-//            Integer id = nameToId.get(userName);
-//            if(id == null){
-//                response.getWriter().println(pageGenerator.getAuthorizationPage(userName));
-//                messageSystem.sendMessage(new MsgGetUserId(getAddress(), addressAS, userName));
-//                return;
-//            }
-//            // вывести вопрос пользователю: вы готовы играть?
-//            response.getWriter().println(pageGenerator.getTextPage("User name: " + userName + "\t Id: " + id, id));
-//            return;
-//        }
-//        
-//        
-//
-//        
-//        
-//        if(!gameStarted && !gameFinished){
-//            if(!request.getMethod().equals("POST")){
-//                // первый запрос от пользователя. Выводим страницу ввода имени
-//                if(request.getParameter("name") == null) 
-//                    response.getWriter().println(pageGenerator.getInputNamePage());
-//            }
-//            else{
-//                if(request.getParameter("name") != null){
-//                    // Обработка ответа пользователя, если в ответе присутствует имя
-//                    String userName = request.getParameter("name");
-//                    Integer ID = nameToId.get(userName);
-//                    if(ID == null){
-//                        response.getWriter().println(pageGenerator.getAuthorizationPage(userName));
-//                        messageSystem.sendMessage(new MsgGetUserId(getAddress(), addressAS, userName));
-//                    } else {
-//                        response.getWriter().println(pageGenerator.getTextPage("User name: " + userName + "\t Id: " + ID, ID));
-//                        if(users.size() > 1) {
-//                            messageSystem.sendMessage(new MsgStartGameSession( getAddress(), addressGM, users.get(0).getId(), users.get(1).getId() ));
-//                        }
-//
-//                    }                
-//                }
-//            }
-//        } else if(gameStarted && !gameFinished){
-//            // если игра началась
-//            if(request.getParameter("id") != null){
-//                int id = Integer.parseInt(request.getParameter("id"));
-//                response.getWriter().println(pageGenerator.getTextPage("", id));
-//                messageSystem.sendMessage(new MsgIncrement(getAddress(), addressGM, id));
-//            }        
-//        }
-//        else if(!gameStarted && gameFinished){
-//            // вывод результатов игры
-//            
-//        }
     }
 
     public void run(){
@@ -219,6 +184,8 @@ public class FrontendImpl extends AbstractHandler implements Frontend, Runnable{
         u1.setState(State.PLAYING);
         User u2 = users.get(id2);
         u2.setState(State.PLAYING);
+        u1.setOpponentId(u2.getId());
+        u2.setOpponentId(u1.getId());
     }
     
     // окончание игры
