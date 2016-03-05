@@ -3,6 +3,8 @@ package ru.leonid.gameMechanics;
 import ru.leonid.base.Address;
 import ru.leonid.base.GameMechanics;
 import ru.leonid.base.MessageSystem;
+import ru.leonid.base.Resource;
+import ru.leonid.resourceSystem.ResourceFactory;
 import ru.leonid.utils.TimeHelper;
 
 public class GameMechanicsImpl implements GameMechanics,Runnable{
@@ -21,7 +23,8 @@ public class GameMechanicsImpl implements GameMechanics,Runnable{
         
         Address addressFrontend = messageSystem.getAddressService().getAddressFrontend();
         
-        private final long GAMEPERIOD = 30000;
+        Resource res = (Resource) ResourceFactory.getInstance().getResource("parameters.xml");
+        private final long GAMEPERIOD = res.getPeriod();
 
         public GameSession(int id1, int id2) {
             this.id1 = id1;
