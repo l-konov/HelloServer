@@ -26,5 +26,9 @@ public class TExecutor {
         stmt.close();
 
         return value;
-    }    
+    }
+
+    public void execUpdate(Connection connection, DataSet sataSet){
+        
+    }
 }
