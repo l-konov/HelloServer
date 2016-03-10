@@ -1,4 +1,4 @@
-package ru.leonid.accountService;
+package ru.leonid.databaseService;
 
 import ru.leonid.messageSystem.MsgToFrontend;
 import ru.leonid.base.Address;

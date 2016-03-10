@@ -2,7 +2,7 @@ package ru.leonid.main;
 
 import ru.leonid.messageSystem.MessageSystemImpl;
 import org.eclipse.jetty.server.Server;
-import ru.leonid.accountService.AccountServiceImpl;
+import ru.leonid.databaseService.DatabaseServiceImpl;
 import ru.leonid.base.Abonent;
 import ru.leonid.frontend.FrontendImpl;
 import ru.leonid.gameMechanics.GameMechanicsImpl;
@@ -14,7 +14,7 @@ public class Main {
         FrontendImpl frontend = new FrontendImpl(messageSystem);
         messageSystem.addFrontend((Abonent) frontend);
 
-        AccountServiceImpl accountService = new AccountServiceImpl(messageSystem);
+        DatabaseServiceImpl accountService = new DatabaseServiceImpl(messageSystem);
         messageSystem.addAccountService(accountService);
         
         GameMechanicsImpl gameMechanics = new GameMechanicsImpl(messageSystem);

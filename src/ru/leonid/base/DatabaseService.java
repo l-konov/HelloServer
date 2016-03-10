@@ -1,6 +1,6 @@
 package ru.leonid.base;
 
-public interface AccountService extends Abonent {
+public interface DatabaseService extends Abonent {
 	MessageSystem getMessageSystem();
 
         Integer getUserId(String name);

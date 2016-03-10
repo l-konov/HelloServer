@@ -1,11 +1,11 @@
 package ru.leonid.frontend;
 
-import ru.leonid.accountService.MsgUpdateUserId;
-import ru.leonid.messageSystem.MsgToAS;
-import ru.leonid.base.AccountService;
+import ru.leonid.databaseService.MsgUpdateUserId;
+import ru.leonid.messageSystem.MsgToDb;
 import ru.leonid.base.Address;
+import ru.leonid.base.DatabaseService;
 
-public class MsgGetUserId extends MsgToAS {
+public class MsgGetUserId extends MsgToDb {
         String name;
     
 	public MsgGetUserId(Address from, Address to, String name) {
@@ -13,7 +13,7 @@ public class MsgGetUserId extends MsgToAS {
                 this.name = name;
 	}
 
-	public void exec(AccountService accountService) {
+	public void exec(DatabaseService accountService) {
                 Integer id = accountService.getUserId(name);                
 		accountService.getMessageSystem().sendMessage(new MsgUpdateUserId(getTo(), getFrom(), name, id));
 	}
