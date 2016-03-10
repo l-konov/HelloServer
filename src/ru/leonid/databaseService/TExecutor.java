@@ -28,13 +28,11 @@ public class TExecutor {
         return value;
     }
 
-    public void execUpdate(Connection connection, String[] updates) throws SQLException {
+    public void execUpdate(Connection connection, String update) throws SQLException {
         connection.setAutoCommit(false);		
-        for(String update: updates){
-            Statement stmt = connection.createStatement();
-            stmt.executeUpdate(update);
-            stmt.close();				
-        }
+        Statement stmt = connection.createStatement();
+        stmt.executeUpdate(update);
+        stmt.close();				
         connection.commit();	
     }
 }

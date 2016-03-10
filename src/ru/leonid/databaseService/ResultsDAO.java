@@ -25,12 +25,12 @@ public class ResultsDAO {
             @Override
             public ResultsDataSet handle(ResultSet resultSet) throws SQLException {
                 resultSet.next();
-                ResultsDataSet dataSet = new ResultsDataSet(resultSet.getLong("sessionId"), 
-                        resultSet.getLong("id1"), 
-                        resultSet.getLong("id2"), 
+                ResultsDataSet dataSet = new ResultsDataSet(resultSet.getInt("sessionId"), 
+                        resultSet.getInt("id1"), 
+                        resultSet.getInt("id2"), 
                         resultSet.getInt("score1"), 
                         resultSet.getInt("score2"), 
-                        resultSet.getLong("winnerId"));
+                        resultSet.getInt("winnerId"));
                 return dataSet;
             }
         });
@@ -46,14 +46,13 @@ public class ResultsDAO {
         long winnerId = dataSet.getWinnerId();
         String s1 = String.format("INSERT INTO Results (sessionId, id1, id2, score1, score2, winnerId) "
                 + "VALUES (%d, %d, %d, %d, %d, %d)", sessionId, id1, id2, score1, score2, winnerId);
-        String[] updates = {s1};
-        ex.execUpdate(con, updates);
+        ex.execUpdate(con, s1);
     }
     
     public void delete(long sessionId) throws SQLException{
         TExecutor ex = new TExecutor();
-        String[] updates = {"DELETE FROM Results WHERE sessionId=" + sessionId};
-        ex.execUpdate(con, updates);
+        String update = "DELETE FROM Results WHERE sessionId=" + sessionId;
+        ex.execUpdate(con, update);
     }
     
 }

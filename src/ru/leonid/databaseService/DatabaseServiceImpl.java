@@ -4,12 +4,12 @@
 
 package ru.leonid.databaseService;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import ru.leonid.base.Address;
 import ru.leonid.base.MessageSystem;
 import ru.leonid.utils.TimeHelper;
@@ -19,12 +19,37 @@ public class DatabaseServiceImpl implements DatabaseService, Runnable{
     private Address address = Address.getNew();
     private MessageSystem messageSystem;
 
-    private Map<String, Integer> accounter = new HashMap<String, Integer>();
+    private UsersDAO usersDAO;
+    private ResultsDAO resultsDAO;
 
     public DatabaseServiceImpl(MessageSystem messageSystem){
         this.messageSystem = messageSystem;
-        this.accounter.put("Tully", 1);
-        this.accounter.put("Sully", 2);
+        Connection connection = getConnection();
+        TExecutor exec = new TExecutor();
+        String updates = "CREATE TABLE Users (id bigint, name varchar(256), primary key (id))";
+        try {
+            exec.execUpdate(connection, updates);
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String updates1 = "CREATE TABLE Results (sessionId bigint, "
+                + "id1 bigint, id2 int, score1 int, "
+                + "score2 bigint, winnerId bigint, primary key (sessionId))";
+        try {
+            exec.execUpdate(connection, updates1);
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        usersDAO = new UsersDAO(connection);
+        resultsDAO = new ResultsDAO(connection);
+        UsersDataSet tully = new UsersDataSet(1, "Tully");
+        UsersDataSet sully = new UsersDataSet(2, "Sully");
+        try {            
+            usersDAO.add(tully);
+            usersDAO.add(sully);
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public static Connection getConnection() {
@@ -60,10 +85,18 @@ public class DatabaseServiceImpl implements DatabaseService, Runnable{
     }
 
     public Integer getUserId(String name){
-        TimeHelper.sleep(5000);
-        if(!accounter.containsKey(name))
-            accounter.put(name, Math.round((float)Math.random() * 100));
-        return accounter.get(name);        
+        try {
+            TimeHelper.sleep(5000);
+            UsersDataSet dataSet = usersDAO.getByName(name);
+            if(dataSet == null){
+                UsersDataSet ds = new UsersDataSet(Math.round((float)Math.random() * 100), name);
+                usersDAO.add(ds);
+            }        
+            return dataSet.getId();
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     public Address getAddress() {

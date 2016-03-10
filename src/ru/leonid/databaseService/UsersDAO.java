@@ -19,29 +19,45 @@ public class UsersDAO {
         this.con = con;
     }
 
-    public UsersDataSet get(long id) throws SQLException{
+    public UsersDataSet get(int id) throws SQLException{
         TExecutor exec = new TExecutor();
         return exec.execQuery(con, "SELECT * FROM Users WHERE id = " + id, new TResultHandler<UsersDataSet>() {
             @Override
             public UsersDataSet handle(ResultSet resultSet) throws SQLException {
-                resultSet.next();
-                UsersDataSet dataSet = new UsersDataSet(resultSet.getLong("id"), resultSet.getString("name"));
-                return dataSet;
+                if(resultSet.next()){
+                    UsersDataSet dataSet = new UsersDataSet(resultSet.getInt("id"), resultSet.getString("name"));
+                    return dataSet;
+                } else
+                    return null;
             }
         });
     }
+    
+    public UsersDataSet getByName(String name) throws SQLException{
+        TExecutor exec = new TExecutor();
+        return exec.execQuery(con, "SELECT * FROM Users WHERE name = " + name, new TResultHandler<UsersDataSet>() {
+            @Override
+            public UsersDataSet handle(ResultSet resultSet) throws SQLException {
+                if(resultSet.next()){
+                    UsersDataSet dataSet = new UsersDataSet(resultSet.getInt("id"), resultSet.getString("name"));
+                    return dataSet;
+                } else 
+                    return null;
+            }
+        });
+    }    
     
     public void add(UsersDataSet dataSet) throws SQLException{
         TExecutor ex = new TExecutor();
         long id = dataSet.getId();
         String name = dataSet.getName();
-        String[] updates = {"INSERT INTO Users (id, name) VALUES (" + id + " ,\'" + name + "\')"};
+        String updates = String.format("INSERT INTO Users (id, name) VALUES (%d, %s)", id,  name);
         ex.execUpdate(con, updates);
     }
     
     public void delete(long id) throws SQLException{
         TExecutor ex = new TExecutor();
-        String[] updates = {"DELETE FROM Users WHERE id=" + id};
+        String updates = "DELETE FROM Users WHERE id=" + id;
         ex.execUpdate(con, updates);
     }
     

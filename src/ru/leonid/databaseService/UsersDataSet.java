@@ -9,10 +9,10 @@ package ru.leonid.databaseService;
  * @author Лёня
  */
 public class UsersDataSet {
-    private long id;
+    private int id;
     private String name;
 
-    public UsersDataSet(long id, String name){
+    public UsersDataSet(int id, String name){
         this.id = id;
         this.name = name;
     }
@@ -20,7 +20,7 @@ public class UsersDataSet {
     public String getName() {
         return name;
     }
-    public long getId() {
+    public int getId() {
         return id;
     }    
 }
