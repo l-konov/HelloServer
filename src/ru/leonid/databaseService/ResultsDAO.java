@@ -36,4 +36,24 @@ public class ResultsDAO {
         });
     }
     
+    public void add(ResultsDataSet dataSet) throws SQLException{
+        TExecutor ex = new TExecutor();
+        long sessionId = dataSet.getSessionId();
+        long id1 = dataSet.getId1();
+        long id2 = dataSet.getId2();
+        int score1 = dataSet.getScore1();
+        int score2 = dataSet.getScore2();
+        long winnerId = dataSet.getWinnerId();
+        String s1 = String.format("INSERT INTO Results (sessionId, id1, id2, score1, score2, winnerId) "
+                + "VALUES (%d, %d, %d, %d, %d, %d)", sessionId, id1, id2, score1, score2, winnerId);
+        String[] updates = {s1};
+        ex.execUpdate(con, updates);
+    }
+    
+    public void delete(long sessionId) throws SQLException{
+        TExecutor ex = new TExecutor();
+        String[] updates = {"DELETE FROM Results WHERE sessionId=" + sessionId};
+        ex.execUpdate(con, updates);
+    }
+    
 }

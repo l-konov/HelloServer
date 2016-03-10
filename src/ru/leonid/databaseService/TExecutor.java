@@ -17,18 +17,24 @@ public class TExecutor {
     public <T> T execQuery(Connection connection, 
             String query, 
             TResultHandler<T> handler)
-            throws SQLException {
+            throws SQLException 
+    {
         Statement stmt = connection.createStatement();
         stmt.execute(query);
         ResultSet result = stmt.getResultSet();
         T value = handler.handle(result);
         result.close();
         stmt.close();
-
         return value;
     }
 
-    public void execUpdate(Connection connection, DataSet sataSet){
-        
+    public void execUpdate(Connection connection, String[] updates) throws SQLException {
+        connection.setAutoCommit(false);		
+        for(String update: updates){
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate(update);
+            stmt.close();				
+        }
+        connection.commit();	
     }
 }

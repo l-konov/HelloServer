@@ -31,8 +31,18 @@ public class UsersDAO {
         });
     }
     
-    public void set(UsersDataSet dataSet){
-        
+    public void add(UsersDataSet dataSet) throws SQLException{
+        TExecutor ex = new TExecutor();
+        long id = dataSet.getId();
+        String name = dataSet.getName();
+        String[] updates = {"INSERT INTO Users (id, name) VALUES (" + id + " ,\'" + name + "\')"};
+        ex.execUpdate(con, updates);
+    }
+    
+    public void delete(long id) throws SQLException{
+        TExecutor ex = new TExecutor();
+        String[] updates = {"DELETE FROM Users WHERE id=" + id};
+        ex.execUpdate(con, updates);
     }
     
 }

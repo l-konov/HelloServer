@@ -9,12 +9,12 @@ package ru.leonid.databaseService;
  * @author Лёня
  */
 public class ResultsDataSet {
-    long sessionId;
-    long id1;
-    long id2;
-    int score1;
-    int score2;
-    long winnerId;
+    private long sessionId;
+    private long id1;
+    private long id2;
+    private int score1;
+    private int score2;
+    private long winnerId;
 
     public ResultsDataSet(long sessionId, long id1, long id2, int score1, int score2, long winnerId) {
         this.sessionId = sessionId;
