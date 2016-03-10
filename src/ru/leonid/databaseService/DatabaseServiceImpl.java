@@ -51,6 +51,45 @@ public class DatabaseServiceImpl implements DatabaseService, Runnable{
             Logger.getLogger(DatabaseServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public void run(){
+        while(true){
+            messageSystem.execForAbonent(this);
+            TimeHelper.sleep(10);
+        }
+    }
+
+    public Integer getUserId(String name){
+        try {
+            TimeHelper.sleep(5000);
+            UsersDataSet dataSet = usersDAO.getByName(name);
+            if(dataSet == null){
+                UsersDataSet ds = new UsersDataSet(Math.round((float)Math.random() * 100), name);
+                usersDAO.add(ds);
+            }        
+            return dataSet.getId();
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public void setGameResult(int id1, int id2, int result1, int result2, int winnerId){
+        try {
+            ResultsDataSet dataSet = new ResultsDataSet(Math.round((float)Math.random() * 100), id1, id2, result1, result2, winnerId);
+            resultsDAO.add(dataSet);
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public MessageSystem getMessageSystem(){
+        return messageSystem;
+    }
     
     public static Connection getConnection() {
         try{
@@ -75,35 +114,5 @@ public class DatabaseServiceImpl implements DatabaseService, Runnable{
             e.printStackTrace();
         }
         return null;
-    }     
-
-    public void run(){
-        while(true){
-            messageSystem.execForAbonent(this);
-            TimeHelper.sleep(10);
-        }
-    }
-
-    public Integer getUserId(String name){
-        try {
-            TimeHelper.sleep(5000);
-            UsersDataSet dataSet = usersDAO.getByName(name);
-            if(dataSet == null){
-                UsersDataSet ds = new UsersDataSet(Math.round((float)Math.random() * 100), name);
-                usersDAO.add(ds);
-            }        
-            return dataSet.getId();
-        } catch (SQLException ex) {
-            Logger.getLogger(DatabaseServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public MessageSystem getMessageSystem(){
-        return messageSystem;
-    }
+    }      
 }
