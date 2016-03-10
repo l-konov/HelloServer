@@ -64,7 +64,7 @@ public class DatabaseServiceImpl implements DatabaseService, Runnable{
             TimeHelper.sleep(5000);
             UsersDataSet dataSet = usersDAO.getByName(name);
             if(dataSet == null){
-                UsersDataSet ds = new UsersDataSet(Math.round((float)Math.random() * 100), name);
+                UsersDataSet ds = new UsersDataSet(0, name);
                 usersDAO.add(ds);
             }        
             return dataSet.getId();
@@ -76,7 +76,7 @@ public class DatabaseServiceImpl implements DatabaseService, Runnable{
     
     public void setGameResult(int id1, int id2, int result1, int result2, int winnerId){
         try {
-            ResultsDataSet dataSet = new ResultsDataSet(Math.round((float)Math.random() * 100), id1, id2, result1, result2, winnerId);
+            ResultsDataSet dataSet = new ResultsDataSet(0, id1, id2, result1, result2, winnerId);
             resultsDAO.add(dataSet);
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseServiceImpl.class.getName()).log(Level.SEVERE, null, ex);

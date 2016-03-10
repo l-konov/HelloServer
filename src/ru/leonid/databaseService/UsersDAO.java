@@ -51,7 +51,7 @@ public class UsersDAO {
         TExecutor ex = new TExecutor();
         long id = dataSet.getId();
         String name = dataSet.getName();
-        String updates = String.format("INSERT INTO Users (id, name) VALUES (%d, %s)", id,  name);
+        String updates = String.format("INSERT INTO Users (name) VALUES (%s)",  name);
         ex.execUpdate(con, updates);
     }
     
