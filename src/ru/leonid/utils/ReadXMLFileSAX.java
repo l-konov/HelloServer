@@ -2,7 +2,6 @@ package ru.leonid.utils;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import org.xml.sax.helpers.DefaultHandler;
 
 public class ReadXMLFileSAX { 
 	public static Object readXML(String xmlFile) {	 
