@@ -12,10 +12,10 @@ import java.sql.SQLException;
  *
  * @author Лёня
  */
-public class ResultsDAO {
+public class ResultsDAOLegacy {
     private Connection con;
 
-    public ResultsDAO(Connection con) {
+    public ResultsDAOLegacy(Connection con) {
         this.con = con;
     }
     

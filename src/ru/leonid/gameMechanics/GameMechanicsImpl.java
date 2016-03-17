@@ -21,7 +21,12 @@ public class GameMechanicsImpl implements GameMechanics,Runnable{
         
         long startTime;
         
-        Address addressFrontend = messageSystem.getAddressService().getAddressFrontend();
+        Address addressFrontend = messageSystem
+                .getAddressService()
+                .getAddressFrontend();
+        Address addressDB = messageSystem
+                .getAddressService()
+                .getAddressDB();
         
         Resource res = (Resource) ResourceFactory.getInstance().getResource("parameters.xml");
         private final long GAMEPERIOD = res.getPeriod();
@@ -61,6 +66,7 @@ public class GameMechanicsImpl implements GameMechanics,Runnable{
             // посылаем на фронтент сообщение об окончании игры и победителе
             int winner = getWinner();
             messageSystem.sendMessage(new MsgFinishGame(getAddress(), addressFrontend, id1, id2, result1, result2, winner));
+            messageSystem.sendMessage(new MsgSetResultToDb(getAddress(), addressDB, id1, id2, result1, result2, winner));
         }
          
     }

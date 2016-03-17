@@ -92,7 +92,7 @@ public class FrontendImpl extends AbstractHandler implements Frontend, Runnable{
         response.setContentType("text/html; charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);   
-        Address addressAS = messageSystem.getAddressService().getAddressAS();
+        Address addressAS = messageSystem.getAddressService().getAddressDB();
         Address addressGM = messageSystem.getAddressService().getAddressGM();
         PrintWriter responsePW = response.getWriter();
         

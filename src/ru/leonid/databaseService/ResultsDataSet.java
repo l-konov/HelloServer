@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -40,6 +39,8 @@ public class ResultsDataSet {
     @Column(name="winnerId")
     private int winnerId;
 
+    public ResultsDataSet(){}
+    
     public ResultsDataSet(int sessionId, int id1, int id2, int score1, int score2, int winnerId) {
         this.sessionId = sessionId;
         this.id1 = id1;

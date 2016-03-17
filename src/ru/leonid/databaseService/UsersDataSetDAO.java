@@ -8,6 +8,7 @@ package ru.leonid.databaseService;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -36,7 +37,9 @@ public class UsersDataSetDAO {
     
     public UsersDataSet readByName(String name){
         Session s = sessionFactory.openSession();
-        UsersDataSet dataSet = s.load(UsersDataSet.class, name);
+        UsersDataSet dataSet = (UsersDataSet) s.createCriteria(UsersDataSet.class)
+                .add(Restrictions.eq("name", name))
+                .uniqueResult();
         return dataSet;
     }
 }

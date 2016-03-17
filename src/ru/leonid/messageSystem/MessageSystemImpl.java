@@ -18,7 +18,7 @@ public class MessageSystemImpl implements MessageSystem {
 	}
 	
 	public void addAccountService(Abonent abonent){
-		addressService.setAddressAS(abonent.getAddress());
+		addressService.setAddressDB(abonent.getAddress());
 		messages.put(abonent.getAddress(), new ArrayBlockingQueue<Msg>(QUEUE_SIZE));
 	}
         

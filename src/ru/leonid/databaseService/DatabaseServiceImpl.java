@@ -85,6 +85,7 @@ public class DatabaseServiceImpl implements DatabaseService, Runnable{
         if(dataSet == null){
             UsersDataSet ds = new UsersDataSet(0, name);
             usersDao.save(ds);
+            return ds.getId();
         }        
         return dataSet.getId();
     }

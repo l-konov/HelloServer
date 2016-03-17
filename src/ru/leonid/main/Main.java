@@ -24,7 +24,7 @@ public class Main {
         (new Thread(accountService)).start();
         (new Thread(gameMechanics)).start();
         
-        Server server = new Server(8080);
+        Server server = new Server(8081);
         server.setHandler(frontend);
 
         server.start();
