@@ -4,16 +4,40 @@
 
 package ru.leonid.databaseService;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import org.hibernate.annotations.GenericGenerator;
+
 /**
  *
  * @author Лёня
  */
+@Entity
+@Table(name="results")
 public class ResultsDataSet {
+    
+    @Id
+    @Column(name="sessionId")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int sessionId;
+    
+    @Column(name="id1")
     private int id1;
+    
+    @Column(name="id2")
     private int id2;
+    
+    @Column(name="score1")
     private int score1;
+    
+    @Column(name="score2")
     private int score2;
+    
+    @Column(name="winnerId")
     private int winnerId;
 
     public ResultsDataSet(int sessionId, int id1, int id2, int score1, int score2, int winnerId) {
